@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+sudo -i
+time curl https://raw.githubusercontent.com/cmcornejocrespo/installcentos/master/install-openshift.sh | sh
