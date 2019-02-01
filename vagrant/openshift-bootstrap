@@ -1,11 +1,15 @@
 #!/usr/bin/env bash
 
-sudo -i
-time curl https://raw.githubusercontent.com/cmcornejocrespo/installcentos/master/install-openshift.sh | sh
+curl https://raw.githubusercontent.com/cmcornejocrespo/installcentos/master/install-openshift.sh | sudo sh
+
+#install helm
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | sh
+export PATH=$PATH:/usr/local/bin
 
 # install istio
 curl -L https://git.io/getLatestIstio | sh -
-cd istio-1.0.5
+
+oc login -u admin -p password https://console.192.168.77.21.nip.io:8443/ --insecure-skip-tls-verify
 
 oc adm policy add-scc-to-user anyuid -z istio-ingress-service-account -n istio-system
 oc adm policy add-scc-to-user anyuid -z default -n istio-system
@@ -22,20 +26,51 @@ oc adm policy add-scc-to-user anyuid -z istio-galley-service-account -n istio-sy
 oc adm policy add-scc-to-user privileged -z default -n istio-system
 oc adm policy add-scc-to-user privileged -z default -n default
 
+# Helm setup
+oc create -f istio-1.0.5/install/kubernetes/helm/helm-service-account.yaml
+helm init --service-account tiller
 
-oc apply -f install/kubernetes/helm/istio/templates/crds.yaml
-oc apply -f install/kubernetes/istio-demo-auth.yaml
+sleep 15
 
+helm install istio-1.0.5/install/kubernetes/helm/istio --name istio --namespace istio-system --set gateways.istio-ingressgateway.type=NodePort --set gateways.istio-egressgateway.type=NodePort
+#enable sidecar injection on default namespace
+oc label namespace default istio-injection=enabled
+
+sudo -s
+cd /etc/origin/master/
+
+cat <<EOF > master-config.patch
+admissionConfig:
+  pluginConfig:
+    MutatingAdmissionWebhook:
+      configuration:
+        apiVersion: apiserver.config.k8s.io/v1alpha1
+        kubeConfigFile: /dev/null
+        kind: WebhookAdmission
+    ValidatingAdmissionWebhook:
+      configuration:
+        apiVersion: apiserver.config.k8s.io/v1alpha1
+        kubeConfigFile: /dev/null
+        kind: WebhookAdmission
+EOF
+
+cp -p master-config.yaml master-config.yaml.prepatch
+oc ex config patch master-config.yaml.prepatch -p "$(cat master-config.patch)" > master-config.yaml
+/usr/local/bin/master-restart api && /usr/local/bin/master-restart controllers
+cd -
+
+exit
+
+cd istio-1.0.5/
 export PATH=$PATH:./bin
 istioctl version
 
 #Demo - Bookinfo Application
-oc label namespace default istio-injection=enabled
 oc apply -f <(istioctl kube-inject -f samples/bookinfo/platform/kube/bookinfo.yaml)
 oc apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
 
-oc expose svc istio-ingressgateway -n istio-system
-oc expose svc servicegraph -n istio-system
-oc expose svc grafana -n istio-system
-oc expose svc prometheus -n istio-system
-oc expose svc tracing -n istio-system
+#oc expose svc istio-ingressgateway -n istio-system
+#oc expose svc servicegraph -n istio-system
+#oc expose svc grafana -n istio-system
+#oc expose svc prometheus -n istio-system
+#oc expose svc tracing -n istio-system
