@@ -1,5 +1,4 @@
 # Created by .ignore support plugin (hsz.mobi)
 /atso-0138-challenge-red-hat-q1.iml
 /.idea/
-/vagrant/.vagrant/
-vagrant-istio-helm/.vagrant
+**/vagrant/**/.vagrant/
