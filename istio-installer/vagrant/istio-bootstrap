@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-curl https://raw.githubusercontent.com/cmcornejocrespo/installcentos/master/install-openshift.sh | sudo sh -
+# oc login
+oc login -u admin -p password https://console.192.168.77.21.nip.io:8443/ --insecure-skip-tls-verify
 
-# install istio
-curl -L https://git.io/getLatestIstio | sh -
-cd istio-1.0.5
-
+# enable containers running with UID 0 for Istio’s service accounts:
 oc adm policy add-scc-to-user anyuid -z istio-ingress-service-account -n istio-system
 oc adm policy add-scc-to-user anyuid -z default -n istio-system
 oc adm policy add-scc-to-user anyuid -z prometheus -n istio-system
@@ -21,19 +19,15 @@ oc adm policy add-scc-to-user anyuid -z istio-galley-service-account -n istio-sy
 oc adm policy add-scc-to-user privileged -z default -n istio-system
 oc adm policy add-scc-to-user privileged -z default -n default
 
-oc apply -f install/kubernetes/helm/istio/templates/crds.yaml
-oc apply -f install/kubernetes/istio-demo-auth.yaml
+# install istio
+curl -L https://git.io/getLatestIstio | sh -
 
-export PATH=$PATH:./bin
-istioctl version
+oc apply -f istio-1.0.5/install/kubernetes/helm/helm-service-account.yaml
 
-#Demo - Bookinfo Application
-oc label namespace default istio-injection=enabled
-oc apply -f <(istioctl kube-inject -f samples/bookinfo/platform/kube/bookinfo.yaml)
-oc apply -f samples/bookinfo/networking/bookinfo-gateway.yaml
+#install helm
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get | sh -
+helm init --service-account tiller
 
-oc expose svc istio-ingressgateway -n istio-system
-oc expose svc servicegraph -n istio-system
-oc expose svc grafana -n istio-system
-oc expose svc prometheus -n istio-system
-oc expose svc tracing -n istio-system
+sleep 20
+
+helm install istio-1.0.5/install/kubernetes/helm/istio --name istio --namespace istio-system --set gateways.istio-ingressgateway.type=NodePort --set gateways.istio-egressgateway.type=NodePort --set kiali.enabled=true

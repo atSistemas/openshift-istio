@@ -4,8 +4,5 @@
 Contiene el código necesario para realizar una POC basada en Openshift e Istio. Esta prueba de concepto utiliza un para de microservicios de ejemplo sobre los cuales ejecutar una serie de casos de uso de Istio.
 
 ## Estructura
-- Istio-installer: Contiene los scripts necesarios para instalar istio en tres sabores:
-  - Standalone: Instala [istio](istio-installer/ISTIO-INSTALLER.md) sobre un cluster de Openshift via Helm
-  - [Bootstrap](istio-installer/vagrant/VAGRANT-BOOTSTRAP.md) de vagrant/openshift/istio
-  - [Bootstrap](istio-installer/vagrant/VAGRANT-BOOTSTRAP.md) de vagrant/openshift/istio con helm
+- Istio-installer: Contiene los scripts necesarios para instalar istio [Bootstrap](istio-installer/vagrant/VAGRANT-BOOTSTRAP.md) de vagrant/openshift/istio con helm
 - Challenge: Descriptores de despliegue con los distintos escenarios de Istio
