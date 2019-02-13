@@ -3,17 +3,21 @@
 Run okd 3.11 locally using vagrant and install istio
 
 ## Requirements
-- 8 GB RAM
+- 10 GB RAM
 - vagrant
 - virtualbox
-
-## Istio installation flavours
-- via istio (vagrant-istio)
-- via helm (vagrant-istio-helm)
 
 ## Bootstrap
 ``` bash
 vagrant up
+```
+
+## Deploy Istio
+``` bash
+$ vagrant ssh
+
+## dentro de la vm
+./vagrant/istio-bootstrap
 ```
 
 ## Access to cluster
