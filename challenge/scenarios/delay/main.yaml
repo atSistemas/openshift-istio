@@ -2,23 +2,21 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: todo-repo
+  labels:
+    app: todo-repo
 spec:
   hosts:
   - todo-repo
   http:
-  - match:
-    - headers:
-        end-user:
-          exact: batman
-    fault:
+  - fault:
       delay:
-        percent: 100
+        percent: 80
         fixedDelay: 7s
     route:
     - destination:
         host: todo-repo
-        subset: v1
+        subset: delay
   - route:
     - destination:
         host: todo-repo
-        subset: v1
+        subset: delay

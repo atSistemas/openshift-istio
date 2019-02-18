@@ -1,11 +1,17 @@
 ### Desplegar recursos relacionados con istio
 ```
-kubectl apply -f gateway.yaml
+oc apply -f gateway.yaml
 ```
 
 ### Desplegar microservicios
 ```
-kubectl apply -f <(istioctl kube-inject -f service.yaml)
+oc apply -f <(istioctl kube-inject -f ../todo-client.yaml)
+# check proxy has been injected (todo-client,istio-proxy should appear)
+oc get deployment todo-client -o wide
+
+oc apply -f <(istioctl kube-inject -f ../../todo-repo-k8s/todo-repo.yaml)
+# check proxy has been injected (todo-repo,istio-proxy should appear)
+oc get deployment todo-repo -o wide
 ```
 
 ## Para probar determinados casos de uso, es suficiente con aplicar los .yaml correspondientes:

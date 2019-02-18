@@ -2,15 +2,21 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: todo-repo
+  labels:
+    app: todo-client
 spec:
   hosts:
   - todo-repo
   http:
   - fault:
       abort:
-        percent: 20
-        httpStatus: 400
+        percent: 50
+        httpStatus: 404
     route:
     - destination:
         host: todo-repo
-        subset: v1
+        subset: http-errors
+  - route:
+    - destination:
+        host: todo-repo
+        subset: http-errors
