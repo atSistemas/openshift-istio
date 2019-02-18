@@ -3,7 +3,7 @@
 Run okd 3.11 locally using vagrant and install istio
 
 ## Requirements
-- 10 GB RAM
+- 8 GB RAM
 - vagrant
 - virtualbox
 
