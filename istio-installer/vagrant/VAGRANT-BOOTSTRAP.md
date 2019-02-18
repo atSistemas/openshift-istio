@@ -1,6 +1,6 @@
 # OKD 3.11 Bootstrap
 
-Run okd 3.11 locally using vagrant and install istio
+Run okd 3.11 on steroids with istio locally using vagrant
 
 ## Requirements
 - 8 GB RAM

@@ -1,5 +1,5 @@
 # Challenge
-Esta carpeta contiene los descriptores de despliegue de los microservicios utilizados para el challenge
+Esta carpeta contiene los descriptores de despliegue de los microservicios utilizados para la poc
 
 # Deploy services
 ``` bash
