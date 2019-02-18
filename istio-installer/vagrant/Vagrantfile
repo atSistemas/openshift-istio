@@ -8,9 +8,9 @@ Vagrant.configure("2") do |config|
   config.vm.provider "virtualbox" do |v|
     #play with this value
     v.memory = 8192
-    v.cpus = 4
+    v.cpus = 2
   end
 
-  config.vm.provision "shell", path: "openshift-bootstrap", privileged: "false"
+  config.vm.provision "shell", path: "openshift-bootstrap"
 
 end
