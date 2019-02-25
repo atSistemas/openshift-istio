@@ -35,3 +35,16 @@ Esta carpeta contiene los descriptores de despliegue de los microservicios utili
 # clean up
 ./apps/scripts/cleanup
 ```
+
+## Escenario 3 - circuit breaker
+``` bash
+# deploy app
+./apps/scripts/deploy
+# deploy scenario 03
+#n the DestinationRule settings, you specified maxConnections: 1 and http1MaxPendingRequests: 1. These rules indicate that if you exceed more than one connection and request concurrently, you should see some failures when the istio-proxy opens the circuit for further requests and connections.
+./scenarios/03-circuit-breaker/deploy-scenario
+# populate scripts
+./apps/scripts/startup
+# clean up
+./apps/scripts/cleanup
+```
