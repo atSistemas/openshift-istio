@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# clean up
+oc delete all -l app=todo-repo -n default
+oc delete destinationrules,virtualservices -l app=todo-repo -n default
+oc delete all -l app=todo-client -n default
+oc delete destinationrules,virtualservices -l app=todo-client -n default

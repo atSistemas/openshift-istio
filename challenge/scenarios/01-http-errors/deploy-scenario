@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# parcheamos el deployment con este escenario
+oc patch deployment todo-repo --patch '{"spec": {"template": {"metadata": {"labels": {"version": "http-errors"}}}}}'
+# creamos un todo en repo y accedemos por cliente (50% 200/404)
+oc apply -f scenarios/01-http-errors/main.yaml

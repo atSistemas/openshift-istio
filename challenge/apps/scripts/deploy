@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# manual injection
+oc apply -f <(istioctl kube-inject -f apps/todo-client.yaml)
+oc apply -f <(istioctl kube-inject -f apps/todo-repo.yaml)
+oc apply -f apps/networking.yaml

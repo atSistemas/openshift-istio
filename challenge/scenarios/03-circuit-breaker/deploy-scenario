@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+oc apply -f scenarios/03-circuit-breaker/main.yaml

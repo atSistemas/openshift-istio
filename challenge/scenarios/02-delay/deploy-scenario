@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# parcheamos el deployment con este escenario
+oc patch deployment todo-repo --patch '{"spec": {"template": {"metadata": {"labels": {"version": "delay"}}}}}'
+# desplegamos el virtual service con delay(repo 7s)
+oc apply -f scenarios/02-delay/main.yaml
