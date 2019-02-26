@@ -10,7 +10,6 @@ spec:
       labels:
         app: todo-repo
         version: v2
-        track: release
     spec:
       containers:
       - image: atsistemas/todo-repo:0.3
@@ -30,7 +29,6 @@ spec:
       labels:
         app: todo-repo
         version: v3
-        track: canary
     spec:
       containers:
       - image: atsistemas/todo-repo:0.3

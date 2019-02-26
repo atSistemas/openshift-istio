@@ -1,0 +1,15 @@
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: todo-repo
+  labels:
+    app: todo-repo
+spec:
+  hosts:
+    - todo-repo
+  http:
+  - route:
+    - destination:
+        host: todo-repo
+        subset: v3

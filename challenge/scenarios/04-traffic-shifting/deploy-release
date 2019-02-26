@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+oc apply -f scenarios/04-traffic-shifting/release-v3.yaml
