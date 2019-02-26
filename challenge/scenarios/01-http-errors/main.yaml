@@ -3,7 +3,7 @@ kind: VirtualService
 metadata:
   name: todo-repo
   labels:
-    app: todo-client
+    app: todo-repo
 spec:
   hosts:
   - todo-repo

@@ -1,0 +1,40 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: todo-repo-release
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: todo-repo
+        version: v2
+        track: release
+    spec:
+      containers:
+      - image: atsistemas/todo-repo:0.3
+        imagePullPolicy: IfNotPresent
+        name: todo-repo
+        ports:
+        - containerPort: 8081
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: todo-repo-canary
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: todo-repo
+        version: v3
+        track: canary
+    spec:
+      containers:
+      - image: atsistemas/todo-repo:0.3
+        imagePullPolicy: IfNotPresent
+        name: todo-repo
+        ports:
+        - containerPort: 8081
