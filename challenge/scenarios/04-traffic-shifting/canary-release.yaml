@@ -13,3 +13,8 @@ spec:
     - destination:
         host: todo-repo
         subset: v2
+      weight: 70
+    - destination:
+        host: todo-repo
+        subset: v3
+      weight: 30
