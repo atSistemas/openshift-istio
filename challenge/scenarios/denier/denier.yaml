@@ -1,0 +1,24 @@
+apiVersion: "config.istio.io/v1alpha2"
+kind: denier
+metadata:
+  name: denytodorepocanaryhandler
+spec:
+  status:
+    code: 7
+    message: Not allowed
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: checknothing
+metadata:
+  name: denytodorepocanaryrequest
+spec:
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: denytodorepocanary
+spec:
+  match: destination.labels["app"] == "todo-repo" && destination.labels["version"] == "canary"
+  actions:
+  - handler: denyreviewsv3handler.denier
+    instances: [ denyreviewsv3request.checknothing ]
