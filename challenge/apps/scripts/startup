@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 # populate repo with some content
-for i in {1..10}; 
+for i in {1..20}; 
 do curl -X POST "http://todo-repo-default.apps.192.168.77.21.nip.io/todo" -H "accept: */*" -H "Content-Type: application/json" -d "{\"title\": \"My id is::$i\"}" && echo "\n";
 done;
 # retrive some content
-for i in {1..10}; 
+for i in {1..20}; 
 do curl -X GET "http://istio-ingressgateway-istio-system.apps.192.168.77.21.nip.io/todo/$i" -H "accept: */*" && echo "\n";
 done;

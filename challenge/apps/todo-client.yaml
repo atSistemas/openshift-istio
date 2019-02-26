@@ -26,7 +26,7 @@ spec:
     metadata:
       labels:
         app: todo-client
-        version: all-ok
+        version: v1
     spec:
       containers:
       - name: todo-client

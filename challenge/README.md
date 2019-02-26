@@ -48,3 +48,19 @@ Esta carpeta contiene los descriptores de despliegue de los microservicios utili
 # clean up
 ./apps/scripts/cleanup
 ```
+
+## Escenario 4 - traffic shifting
+``` bash
+# deploy app
+./apps/scripts/deploy
+# deploy release and canary version with some weights (80/20)
+./scenarios/04-traffic-shifting/deploy-scenario
+# populate scripts (services must be healthy)
+./apps/scripts/startup
+# deploy release (100% v3)
+./scenarios/04-traffic-shifting/deploy-release
+# populate scripts (services must be healthy)
+./apps/scripts/startup
+# clean up
+./apps/scripts/cleanup
+```
