@@ -21,10 +21,6 @@ oc adm policy add-scc-to-user anyuid -z istio-galley-service-account -n istio-sy
 oc adm policy add-scc-to-user privileged -z default -n istio-system
 oc adm policy add-scc-to-user privileged -z default -n default
 
-# oc adm policy add-scc-to-user anyuid -z  challenge -n istio-system
-# oc adm policy add-scc-to-user privileged -z challenge -n istio-system
-# oc adm policy add-scc-to-user privileged -z default -n challenge
-
 # install istio
 curl -L https://git.io/getLatestIstio | ISTIO_VERSION=1.0.5 sh -
 
@@ -39,8 +35,6 @@ sleep 30
 helm install istio-1.0.5/install/kubernetes/helm/istio \
                                                     --name istio \
                                                     --namespace istio-system \
-                                                    --set gateways.istio-ingressgateway.type=NodePort \
-                                                    --set gateways.istio-egressgateway.type=NodePort \
                                                     --set kiali.enabled=true \
                                                     --set mixer.telemetry.enabled=false
 
