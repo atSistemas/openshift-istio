@@ -5,7 +5,7 @@ En este caso hay dos versiones desplegadas de la misma aplicación y vamos a den
 Para desplegar la nueva versión de la app:
 
 ```
-oc apply -f todo-repo-canary.yaml
+oc apply -f main.yaml
 ```
 
 Posteriormente, los recursos necesarios de Istio:
