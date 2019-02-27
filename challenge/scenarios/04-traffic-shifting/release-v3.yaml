@@ -12,4 +12,9 @@ spec:
   - route:
     - destination:
         host: todo-repo
-        subset: v3
+        subset: v2
+
+
+
+
+        

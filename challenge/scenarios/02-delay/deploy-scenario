@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 # parcheamos el deployment con este escenario
-oc patch deployment todo-repo --patch '{"spec": {"template": {"metadata": {"labels": {"version": "delay"}}}}}'
-# desplegamos el virtual service con delay(repo 7s)
-oc apply -f scenarios/02-delay/main.yaml
+# oc patch deployment todo-repo --patch '{"spec": {"template": {"metadata": {"labels": {"version": "delay"}}}}}'
+# desplegamos el virtual service con delay(repo 3s 80%)
+oc apply -f <(istioctl kube-inject -f scenarios/02-delay/main.yaml)

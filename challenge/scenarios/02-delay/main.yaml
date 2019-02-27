@@ -1,4 +1,51 @@
 apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: todo-client-gateway
+  label:
+    app: todo-client
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: todo-client
+  labels:
+    app: todo-client
+spec:
+  hosts:
+  -  "*"
+  gateways:
+  - todo-client-gateway
+  http:
+  - route:
+    - destination:
+        host: todo-client
+        subset: v1
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: todo-client
+  labels:
+    app: todo-client
+spec:
+  host: todo-client
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+---
+apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: todo-repo
@@ -11,7 +58,7 @@ spec:
   - fault:
       delay:
         percent: 80
-        fixedDelay: 7s
+        fixedDelay: 3s
     route:
     - destination:
         host: todo-repo
@@ -20,3 +67,115 @@ spec:
     - destination:
         host: todo-repo
         subset: delay
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: todo-repo
+  labels:
+    app: todo-repo
+spec:
+  host: todo-repo
+  subsets:
+  - name: delay
+    labels:
+      version: delay
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-client
+  labels:
+    app: todo-client
+spec:
+  ports:
+  - name: http
+    port: 8082
+  selector:
+    app: todo-client
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-client
+  labels:
+    app: todo-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-client
+  template:
+    metadata:
+      labels:
+        app: todo-client
+        version: v1
+    spec:
+      containers:
+      - name: todo-client
+        image: atsistemas/todo-client:0.3
+        env:
+          - name: TODO_SERVER_URL
+            value: http://todo-repo:8081
+          - name: JAVA_OPTS
+            value: "-Xmx512M -Xms512M"
+        ports:
+          - containerPort: 8082
+            name: http
+            protocol: TCP
+      imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-repo
+  labels:
+    app: todo-repo
+spec:
+  ports:
+  - name: http
+    port: 8081
+  selector:
+    app: todo-repo
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-repo
+  labels:
+    app: todo-repo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-repo
+  template:
+    metadata:
+      labels:
+        app: todo-repo
+        version: delay
+    spec:
+      containers:
+      - name: todo-repo
+        image: atsistemas/todo-repo:0.3
+        env:
+          - name: JAVA_OPTS
+            value: "-Xmx512M -Xms512M"
+        ports:
+          - containerPort: 8081
+            name: http
+            protocol: TCP
+      imagePullPolicy: Always
+---
+apiVersion: v1
+kind: Route
+metadata:
+  labels:
+    app: todo-repo
+  name: todo-repo
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: todo-repo

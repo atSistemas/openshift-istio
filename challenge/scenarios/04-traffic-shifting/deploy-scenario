@@ -1,3 +1,2 @@
 #!/usr/bin/env bash
 oc apply -f <(istioctl kube-inject -f scenarios/04-traffic-shifting/main.yaml)
-oc apply -f scenarios/04-traffic-shifting/canary-release.yaml

@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-oc apply -f scenarios/03-circuit-breaker/main.yaml
+oc apply -f <(istioctl kube-inject -f scenarios/03-circuit-breaker/main.yaml)
