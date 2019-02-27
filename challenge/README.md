@@ -48,3 +48,21 @@ Esta carpeta contiene los descriptores de despliegue de los microservicios utili
 # clean up
 ./apps/scripts/cleanup
 ```
+
+## Escenario 5 - denier policies
+``` bash
+# deploy
+./scenarios/05-denier/deploy-scenario
+# clean up
+./apps/scripts/cleanup
+```
+
+## Escenario 6 - security
+``` bash
+# deploy scenario
+./scenarios/06-security/deploy-scenario
+# deploy apps
+./apps/scripts/deploy
+# clean up
+./apps/scripts/cleanup
+```
