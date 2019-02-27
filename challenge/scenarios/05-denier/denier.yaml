@@ -1,0 +1,24 @@
+apiVersion: "config.istio.io/v1alpha2"
+kind: denier
+metadata:
+  name: denytodorepov2handler
+spec:
+  status:
+    code: 7
+    message: Not allowed
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: checknothing
+metadata:
+  name: denytodorepov2request
+spec:
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: denytodorepov2
+spec:
+  match: destination.labels["app"] == "todo-repo" && destination.labels["version"] == "v2"
+  actions:
+  - handler: denytodorepov2handler.denier
+    instances: [ denytodorepov2request.checknothing ]

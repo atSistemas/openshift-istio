@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+oc apply -f scenarios/06-security/default-meshpolicy-tls.yaml
+oc apply -f scenarios/06-security/networking.yaml

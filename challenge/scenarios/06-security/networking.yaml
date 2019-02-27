@@ -17,8 +17,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: todo-client
-  labels:
-    app: todo-client
 spec:
   hosts:
   -  "*"
@@ -28,7 +26,8 @@ spec:
   - route:
     - destination:
         host: todo-client
-        subset: v1
+        port:
+          number: 8082
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -43,7 +42,7 @@ spec:
   - route:
     - destination:
         host: todo-repo
-        subset: v1
+        subset: all-ok
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -53,10 +52,14 @@ metadata:
     app: todo-client
 spec:
   host: todo-client
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
   subsets:
-  - name: v1
+  - name: all-ok
     labels:
-      version: v1
+      version: all-ok
+
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: DestinationRule
@@ -66,7 +69,16 @@ metadata:
     app: todo-repo
 spec:
   host: todo-repo
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
   subsets:
-  - name: v1
+  - name: all-ok
     labels:
-      version: v1
+      version: all-ok
+  - name: http-errors
+    labels:
+      version: http-errors
+  - name: delay
+    labels:
+      version: delay
